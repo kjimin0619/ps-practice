@@ -1,17 +1,17 @@
 import sys
 
-num = sys.stdin.readline().strip()
-if (len(num) == 1) : num = "0"+num
-num = [int(num[0]), int(num[1])]
-
+n = int(sys.stdin.readline())
 count = 0
-newNum = num
+newNum = n
+
 while True :
-    newA = newNum[0]
-    newB = newNum[1]
-    newNum = [newB, (newA+newB)%10]
+    a = newNum // 10
+    b = newNum % 10
+    c = (a+b) % 10
+    newNum = 10*b + c
+    
     count += 1
-    if (newNum[0] == num[0]) and (newNum[1] == num[1]) :
+    if (n == newNum) :
         break
     
 print(count)
