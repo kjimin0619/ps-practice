@@ -1,18 +1,15 @@
-def d(n) :
-    a = n // 10000
-    b = (n % 10000) // 1000
-    b_ = (n % 10000) % 1000
-    c = b_ // 100
-    c_ = b_ % 100
-    d = c_ // 10
-    e = c_ % 10
-    return n + a + b + c + d + e
+def find_remove(n) :
+    noneSelfNum = n
+    while n != 0 :
+        noneSelfNum += n % 10 # 오른쪽 숫자부터 더함
+        n = n // 10
+    return noneSelfNum
 
-allNum = [i for i in range(1,10001)]
+numbers = set(i for i in range(1,10001))
+remove_numbers = set()
+for n in range(1,10001) :
+    remove_numbers.add(find_remove(n))
 
-for i in range(1,10001) :
-    delNum = d(i)
-    if delNum in allNum : allNum.remove(delNum)
-  
-for selfNum in allNum :
+self_numbers = numbers - remove_numbers  
+for selfNum in sorted(self_numbers) :
     print(selfNum)
