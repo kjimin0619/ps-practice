@@ -2,15 +2,14 @@
 import sys
 input = sys.stdin.readline
 
-# 9x9 행렬 제작
-nums = [list(map(int, input().split())) for _ in range(9)]
-max_value = max(map(max, nums))
-mi, mj = 0, 0
-
-for i in range(9) :
-    for j in range(9):
-        if nums[i][j] == max_value :
-            mi, mj = i, j
-            break
-print(max_value)
-print(mi+1, mj+1)
+ans, x, y = -1, 0, 0
+for i in range(9):
+    arr = list(map(int, input().split()))
+    # 행 크기 비교 
+    if max(arr) > ans :
+        ans = max(arr)
+        x = i+1 # 행
+        y = arr.index(ans) + 1 # 열
+        
+print(ans)
+print(x, y)
