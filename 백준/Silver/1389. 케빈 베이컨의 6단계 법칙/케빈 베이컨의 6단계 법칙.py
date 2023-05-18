@@ -1,21 +1,35 @@
 from sys import stdin as s
-INF = int(1e9)
 
 n,m = map(int,s.readline().split())
-f_net = [[INF]*(n+1) for _ in range(n+1)] # 친구 형성관계망
+f_net = [[] for _ in range(n+1)] # 친구 형성관계망
 
 for _ in range(m):
     f1, f2 = map(int,s.readline().split())
-    f_net[f1][f2] = f_net[f2][f1] = 1
+    f_net[f1].append(f2)
+    f_net[f2].append(f1)
 
-for k in range(1,n+1):
-    for i in range(1,n+1):
-        for j in range(1,n+1):
-            f_net[i][j] = min(f_net[i][j], f_net[i][k] + f_net[k][j])    
+from collections import deque
 
-# 케빈베이컨 계산
-result = [INF]*(n+1)
-for i in range(1,n+1):
-    f_net[i][0] = f_net[i][i] = 0
-    result[i] = sum(f_net[i])
-print(result.index(min(result)))
+def bfs(start):
+    cnt = [0] * (n+1)
+    visited[start] = 1
+    q = deque()
+
+    q.append(start)
+
+    while q:
+        now = q.popleft()
+
+        for nodes in f_net[now]:
+            if visited[nodes] == 0 :
+                cnt[nodes] = cnt[now] + 1
+                q.append(nodes)
+                visited[nodes] = 1
+    return sum(cnt)
+
+result = []
+for i in range(1, n+1):
+    visited = [0 for _ in range(n+1)]
+    result.append(bfs(i))
+
+print(result.index(min(result))+1)
