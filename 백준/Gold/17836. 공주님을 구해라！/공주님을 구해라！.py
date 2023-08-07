@@ -1,42 +1,41 @@
-import sys
+from sys import stdin as s
 from collections import deque
-input = sys.stdin.readline
 
+N,M,T = map(int, s.readline().split())
+board = []
+for i in range(N) :
+    board.append(list(map(int, s.readline().split())))
+    if 2 in board[i] :
+        g_x, g_y = i, board[i].index(2) # 그람 위치저장
+        
+def bfs(s_x, s_y, e_x, e_y, time) :
+    visited = [[False for _ in range(M)] for _ in range(N)] 
+    q = deque([(s_x, s_y, time)])
+    
+    while q :
+        x,y, time = q.popleft()
+        visited[x][y] = True
+        for i, j in [(-1,0),(0,1),(0,-1),(1,0)] :
+            x_ = x + i
+            y_ = y + j
+            
+            if (0 <= x_ <N and 0 <= y_ < M and not visited[x_][y_] and board[x_][y_] != 1) :
+                visited[x_][y_] = True
+                
+                if x_ == e_x and y_ == e_y :
+                    return (time+1)
+                
+                q.append((x_,y_,time+1))
 
-def bfs(x, y, dst_x, dst_y, time):
-    q = deque([(x, y, time)])
-    visited = [[0] * m for _ in range(n)]
-    dx = [-1, 1, 0, 0]
-    dy = [0, 0, -1, 1]
-    while q:
-        x, y, time = q.popleft()
-        for i in range(4):
-            nx = x + dx[i]
-            ny = y + dy[i]
-            if 0 <= nx < n and 0 <= ny < m and graph[nx][ny] != 1 and not visited[nx][ny]:
-                if nx == dst_x and ny == dst_y:
-                    return time+1
-                visited[nx][ny] = 1
-                q.append((nx, ny, time+1))
     return float('inf')
 
+# 그람 안 쓸 때 
+no_gram = bfs(0,0,N-1,M-1,0)
 
-n, m, t = map(int, input().split())
-graph = [[] for _ in range(n)]
-for i in range(n):
-    graph[i] = list(map(int, input().split()))
-    if 2 in graph[i]:
-        knife = [i, graph[i].index(2)]
+# 그람 쓸 때 
+gram = bfs(0,0,g_x, g_y,0) 
+if gram != float('inf'):
+    gram = gram + abs(N-1 - g_x) + abs(M-1 - g_y)
 
-# 칼 사용 X
-not_use_knife = bfs(0, 0, n-1, m-1, 0)
-
-# 칼 사용 O
-tmp = bfs(0, 0, knife[0], knife[1], 0)
-if tmp != float('inf'):
-    use_knife = tmp + abs(n-1 - knife[0]) + abs(m-1 - knife[1])
-else:
-    use_knife = tmp
-
-ans = min(not_use_knife, use_knife)
-print(ans if ans <= t else 'Fail')
+ans = min(no_gram, gram)
+print(ans if ans <= T else 'Fail')
