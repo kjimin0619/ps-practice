@@ -1,5 +1,5 @@
 def solution(plans):
-    # 시간 숫자화
+    # 시간 분 단위 숫자화 후 오름차순 정렬
     for i in plans:
         time = i[1]
         hour = int(time[:2])
@@ -13,33 +13,34 @@ def solution(plans):
     fin = [] # 수행 완료된 과목들
     i = 0
     time = plans[0][1] # 시작 시간
+    
+    # 새 작업들 시간 순서대로 수행하기
     while i < len(plans) :
         cur = plans[i]
         cur_start_time = cur[1]
         cur_end_time = cur[1] + cur[2]
-        print(cur[0])
         if i+1 == len(plans) :
-            next_start_time = 60*25
+            next_start_time = 60*24 # 최대값
         else :
             next_start_time = plans[i+1][1]
         
-        # 아직 현재 과목을 수행할 수 없다면(시간 안돼서)
+        # 현재 과목 시작가능한 시간이 아니라면
         if time < cur_start_time :
-            # 스택안의 과제가 존재한다면,
+            # 스택안의 과제가 존재할 때
             if stack :
                 name, left_time = stack.pop()
-                # 내꺼 시작하기 전에 끝낼 수 있다면
+                # 끝낼 수 있다면
                 if time + left_time <= cur_start_time :
                     fin.append(name)
                     time = time + left_time
 
-                # 내꺼 시작하기 전에 끝낼 수 없다면
+                # 끝낼 수 없다면
                 else :
                     duration = cur_start_time - time
-                    stack.append((name, left_time - duration)) # 가능한 만큼만 하고 다시 넣기
+                    stack.append((name, left_time - duration)) # 가능한만큼만 하고 다시 넣기
                     time = cur_start_time
                     
-            # 스택안의 과제가 없다면 현재꺼 바로 수행시작 할 수 있도록
+            # 스택안의 과제가 없다면 현재 과제 바로 시작
             else :
                 time = cur_start_time
 
@@ -57,7 +58,7 @@ def solution(plans):
             i += 1
             
         
-    #스택 비우기
+    #남은 스택 비우기
     while stack:
         temp = stack.pop()
         fin.append(temp[0])
