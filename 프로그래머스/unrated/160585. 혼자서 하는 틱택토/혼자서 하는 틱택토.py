@@ -1,33 +1,41 @@
-
-def bingo(player, board):
-    # row 검사
+def bingo(target, board):
+    # 가로
     for i in range(3):
-        if all(cell == player for cell in board[i]):
+        if all(cell == target for cell in board[i]) :
             return True
-    # col 검사
-    for j in range(3):
-        if all (board[i][j] == player for i in range(3)) :
+    # 세로
+    for i in range(3):
+        if all(board[j][i] == target for j in range(3)) :
             return True
-    # diagonal 검사
-    if all (board[i][i] == player for i in range(3)):
+    
+    # 대각선
+    if all(board[i][i] == target for i in range(3)) :
         return True
-    if all(board[i][2-i] == player for i in range(3)):
+        
+    if all(board[i][2-i] == target for i in range(3)) :
         return True
-  
-          
-def solution(board):
-    cnt_o = sum(row.count("O") for row in board)
-    cnt_x = sum(row.count("X") for row in board)
+    
+    return False
 
-    if cnt_x > cnt_o or abs(cnt_x - cnt_o) > 1 :
+def solution(board) :
+    print("board : ",board)
+    o_cnt, x_cnt = 0,0
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] == "O" :
+                o_cnt += 1
+            elif board[i][j] == "X" :
+                x_cnt += 1
+                
+    # 선공, 후공 실수
+    if x_cnt > o_cnt or abs(x_cnt - o_cnt) > 1:
         return 0
     
-    else :
-        if bingo("O", board) and cnt_o - cnt_x != 1 :
-            return 0
-        if bingo("X", board) and cnt_o != cnt_x :
-            return 0
-    return 1
-        
- 
+    # o 빙고
+    if bingo("O",board) and x_cnt == o_cnt :
+        return 0
+    
+    # x 빙고
+    if bingo("X", board) and x_cnt == o_cnt - 1 :
+        return 0
     return 1
