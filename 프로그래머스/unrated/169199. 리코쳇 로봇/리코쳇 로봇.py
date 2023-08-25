@@ -1,33 +1,36 @@
 from collections import deque
 
-
-def solution(board):
-    n = len(board)
+def solution(board) :
     m = len(board[0])
+    n = len(board)
     
-    q = deque()
-    d = [[987654321 for _ in range(m)] for _ in range(n)]
-    
-    for i in range(n):
+    for i in range(n) :
         for j in range(m):
-            if board[i][j] == "R" :
-                q.append((i,j,0))
-                d[i][j] = 0
+            if board[i][j] == "R":
+                s_x, s_y = i, j
+                q = deque((s_x, s_y, 0))    
                 break
-  
-    while q:
-        x,y,c = q.popleft()
+                
+    # 탐색 시작 bfs
+    q = deque([(s_x, s_y, 0)])
+    visited = [[False for _ in range(m)] for _ in range(n)]
+    visited[s_x][s_y] = True
+    
+    while q :
+        x,y, cnt = q.popleft()
         if board[x][y] == "G" :
-            return c
+            return cnt
         
-        for (dx, dy) in [(0,1),(0,-1), (1,0),(-1,0)]:
-            _x = x
-            _y = y
-        
-            while (0<=_x+dx<n and 0<=_y+dy < m and board[_x+dx][_y+dy] != "D") :
-                _x, _y = _x+dx, _y+dy
-            if d[_x][_y] > c+1 :
-                d[_x][_y] = c+1
-                q.append((_x,_y,c+1))
-  
+        for i,j in [(0,1),(0,-1), (1,0),(-1,0)]:
+            _x, _y = x, y
+
+            while (0 <= _x+i < n and 0 <= _y+j < m) and board[_x+i][_y+j] != "D" :
+                _x += i
+                _y += j
+            
+            if not visited[_x][_y] :
+                visited[_x][_y] = True
+                q.append((_x, _y, cnt+1))
+                
     return -1
+            
