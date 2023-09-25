@@ -1,34 +1,33 @@
 from sys import stdin as s
 n = int(s.readline().strip())
-
 board = []
-for i in range(n) :
+for _ in range(n):
     board.append(list(map(int, s.readline().split())))
     
+dp = [[[0 for _ in range(n)] for _ in range(n)] for _ in range(3)]
 
-total = 0
-# pos : 가로 0 세로 1 대각선 2
-def dfs(x,y, pos) :
-    global total
-    
-    if x == n-1 and y == n-1 :
-        total += 1
-        return
-    
-    # 대각선 이동
-    if x+1 < n and y+1 < n and board[x+1][y] == 0 and board[x][y+1] == 0 and board[x+1][y+1] == 0:
-        dfs(x+1, y+1,2)
-        
-    # 가로
-    if pos == 0 or pos == 2:
-        if x < n and y+1 < n and board[x][y+1] == 0 :
-            dfs(x,y+1,0)
+# 가로 첫 번째 행 처리
+dp[0][0][1] = 1
+for j in range(2,n) :
+    if  board[0][j] == 0 :
+        dp[0][0][j] = dp[0][0][j-1]
 
-    # 세로
-    if pos == 1 or pos == 2 :
-        if y < n and x+1 < n and board[x+1][y] == 0 :
-            dfs(x+1,y,1)
+def sol() :
+    for i in range(1,n) :
+        for j in range(1,n) :
+            # 현재 칸이 벽이 아니라면
+            if board[i][j] == 0 :
+                # 가로 (0) : 가로 + 대각선
+                dp[0][i][j] = dp[0][i][j-1] + dp[1][i][j-1] 
+                            
+                # 대각선 (1) : 가로 + 대각선
+                if board[i][j-1] == 0 and board[i-1][j] == 0:
+                    dp[1][i][j] = dp[0][i-1][j-1] + dp[1][i-1][j-1] + dp[2][i-1][j-1]
+                
+                # 세로 (2) : 세로 + 대각선
+                dp[2][i][j] = dp[1][i-1][j] + dp[2][i-1][j]
     
-# 시작
-dfs(0, 1, 0)
-print(total)
+sol()
+ 
+# 최종 답안   
+print(dp[0][n-1][n-1] + dp[1][n-1][n-1] + dp[2][n-1][n-1])
