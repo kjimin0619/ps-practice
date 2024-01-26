@@ -1,12 +1,14 @@
-A,B,C = map(int, input().split())
+import sys
 
-if (A == B and A == C and B == C) :
-    prize = 10000 + A*1000
-elif (A != B and A != C and B != C) :
-    prize = max(A,B,C)*100
+a, b, c = map(int, sys.stdin.readline().split(" "))
+
+if (a == b and a == c):
+  print(a * 1000 + 10000)
+elif (a != b and a != c and b != c):
+  print(max([a, b, c]) * 100)
 else :
-    # 2개는 같은 눈
-    if (A == B or A == C) : prize = 1000 + 100*A
-    else : prize = 1000 + 100*B    
-    
-print(prize)
+  if (a == b or a == c ) :
+    print(1000 + 100*a)
+  else :
+    print(1000 + 100*c)
+  
