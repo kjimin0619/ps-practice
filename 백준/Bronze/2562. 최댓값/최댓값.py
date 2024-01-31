@@ -1,8 +1,12 @@
 import sys
+
 numbers = []
 for _ in range(9):
-    numbers.append(int(sys.stdin.readline()))
+  n = int(sys.stdin.readline().strip())
+  numbers.append(n)
 
-m = max(numbers)
-print(m)
-print(numbers.index(m)+1)
+maxNum = max(numbers)
+maxIdx = numbers.index(maxNum)
+
+print(maxNum)
+print(maxIdx + 1)
