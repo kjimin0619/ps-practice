@@ -1,6 +1,4 @@
-# 2493
 from sys import stdin as s
-
 n = int(s.readline().strip())  # 탑의 개수
 tops = list(map(int, s.readline().split()))  # 탑 높이 정보
 answer = [0] * n  # 결과
@@ -15,8 +13,6 @@ for i in range(n):
       # 수신탑 정보 저장
       answer[i] = stack[-1][1]
       break
-
-  # 수신탑 찾지 못함
   stack.append((tops[i], i + 1))
 
 print(*answer)
