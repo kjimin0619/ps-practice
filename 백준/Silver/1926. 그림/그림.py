@@ -12,11 +12,13 @@ for _ in range(n):
   graph.append(list(map(int, sys.stdin.readline().split())))
 
 # bfs
-total = []
+maxSize = 0
+cnt = 0
 for i in range(n):
   for j in range(m):
     if graph[i][j] and not visited[i][j]:
       currentSize = 1  # 그림의 넓이
+      cnt += 1
       d = deque([(i, j)])
       visited[i][j] = True  # 방문 처리
 
@@ -31,10 +33,8 @@ for i in range(n):
               d.append((nx, ny))
               currentSize += 1
 
-      total.append(currentSize)
+      if maxSize < currentSize:
+        maxSize = currentSize
 
-print(len(total))
-if total :
-  print(max(total))
-else :
-  print("0")
+print(cnt)
+print(maxSize)
