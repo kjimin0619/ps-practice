@@ -15,31 +15,30 @@ for _ in range(n):
   board.append(temp)
 
 # bfs
-visited[0][0][0] = 1
-while d:
-  cn, cm, w = d.popleft()
+visited[0][0][0] = 1  # 시작지점 방문처리
 
-  # 목적지 도착
-  if (cn == n - 1 and cm == m - 1):
+while d:
+  cn, cm, cw = d.popleft()  # 현 위치
+
+  # 목표 지점 도달
+  if cn == n - 1 and cm == m - 1:
+    print(visited[cn][cm][cw])
     flag = 1
-    print(visited[n - 1][m - 1][w])
     break
 
-  # 다음 이동 탐색
   for dn, dm in direction:
-    nn, nm = dn + cn, dm + cm
+    nn, nm = cn + dn, cm + dm
 
     if (0 <= nn < n and 0 <= nm < m):
+      # 첫 방문에다가 지나갈 수 있다면
+      if board[nn][nm] == '0' and visited[nn][nm][cw] == 0:
+        visited[nn][nm][cw] = visited[cn][cm][cw] + 1
+        d.append((nn, nm, cw))
 
-      # 다음 이동이 벽이 아니라면
-      if board[nn][nm] == '0' and visited[nn][nm][w] == 0:
-        visited[nn][nm][w] = visited[cn][cm][w] + 1
-        d.append((nn, nm, w))
-
-      # 다음 이동이 벽인데 아직 부수지 않았다면
-      elif w == 0 and board[nn][nm] == '1':
-        visited[nn][nm][1] = visited[cn][cm][w] + 1
+      # 첫 방문이지만 벽이고, 아직 벽 부수지 않았다면
+      elif board[nn][nm] == '1' and cw == 0:
+        visited[nn][nm][1] = visited[cn][cm][cw] + 1
         d.append((nn, nm, 1))
 
-if not flag:
+if flag == 0:
   print(-1)
