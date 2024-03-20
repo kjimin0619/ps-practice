@@ -1,33 +1,34 @@
 # 9466 텀 프로젝트
 import sys
-sys.setrecursionlimit(123456789)
-t = int(sys.stdin.readline().strip())
 
-# dfs
-def dfs(x):
+sys.setrecursionlimit(123456789)
+t = int(sys.stdin.readline().strip())  # 테스트케이스 개수
+
+
+def dfs(starter):
+  visited[starter] = 1  # 현재 타자 방문 기록
+  group.append(starter)
+  next = selection[starter]  # 현재 타자가 지목한 상대
   global result
-  visited[x] = 1  # 방문 처리
-  cycle.append(x)  # 팀 후보군으로 넣기
-  next = selection[x]
 
   if not visited[next]:
-    dfs(next)  # 계속 탐색
-  else:
-    # 깊이 우선 탐색 끝
-    if next in cycle:  # cycle이 만들어졌다면
-      result += cycle[cycle.index(next):]  # cycle의 시작점부터 끝까지만 추출
+    dfs(next)
+  elif next in group:
+    result += len(group[group.index(next):])
+
 
 for _ in range(t):
-  n = int(sys.stdin.readline().strip())  # 학생 수
-  visited = [0] * (n + 1)  # 팀 결성 여부
-  selection = [0] + list(map(int, sys.stdin.readline().split()))  # 선택 결과
-  result = []  # 결성된 팀
+  #### round start ####
+  n = int(sys.stdin.readline().strip())  # 사람 수
+  visited = [0] + [0] * n  # 방문여부
+  selection = [0] + list(map(int, sys.stdin.readline().split()))  # 작대기
 
-  # 팀 탐색하기
-  for start in range(1, n + 1):
-    # 아직 방문 안한 곳이라면
-    if not visited[start]:
-      cycle = []
-      dfs(start)
+  result = 0  # 팀 결성에 성공한 학생들
 
-  print(n - len(result))
+  for ppl in range(1, n + 1):
+    if not visited[ppl]:
+      group = []  # 방문자 담을 임시 리스트
+      dfs(ppl)
+
+  print(n - result)
+  #### round fin. ####
