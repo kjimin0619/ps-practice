@@ -5,10 +5,11 @@ n = int(input().strip())
 graph = [list(map(int, input().split())) for _ in range(n)]
 
 direction = [(-1, 0), (1, 0), (0, 1), (0, -1)]
-inum = 2
-ans = int(1e9)
+inum = 2  # 육지번호
+ans = int(1e9)  # 최단거리
 
-# 섬 구분짓기
+
+# 대륙 번호 넘버링
 def island_numbering(i, j):
   d = deque([(i, j)])
 
@@ -20,6 +21,7 @@ def island_numbering(i, j):
       if (0 <= nx < n and 0 <= ny < n and graph[nx][ny] == 1):
         graph[nx][ny] = inum
         d.append((nx, ny))
+
 
 # 다리 짓기
 def shortcut(inum):
@@ -43,6 +45,7 @@ def shortcut(inum):
         if (graph[nx][ny] == 0 and dist[nx][ny] == -1):
           dist[nx][ny] = dist[cx][cy] + 1
           d.append((nx, ny))
+
         # 다른 대륙에 도착했다면
         elif graph[nx][ny] > 0 and graph[nx][ny] != inum:
           return dist[cx][cy]
@@ -56,7 +59,7 @@ for i in range(n):
       island_numbering(i, j)
       inum += 1
 
-# 다리 길이 조사
+# 가장 짧은 다리 길이 찾기
 for num in range(2, inum):
   temp = shortcut(num)
   ans = min(ans, temp)
