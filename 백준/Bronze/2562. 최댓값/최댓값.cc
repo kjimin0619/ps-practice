@@ -1,19 +1,13 @@
+#include <algorithm>
 #include <iostream>
 
 using namespace std;
 
+int a[9];
 int main() {
-  int m, idx, temp;
-  m = 1;
-  for (int i = 0; i < 9; i++) {
-    cin >> temp;
-    if (temp > m) {
-      m = temp;
-      idx = i + 1;
-    }
-  }
+  for (int i = 0; i < 9; i++)
+    cin >> a[i];
 
-  cout << m << '\n' << idx;
-
-  return 0;
+  cout << *max_element(a, a + 9) << '\n'; // value
+  cout << max_element(a, a + 9) - a + 1;  // index
 }
