@@ -8,12 +8,12 @@ int main() {
 
   int count[26] = {0}; // 초기화 0
 
-  for (int i = 0; i < s.size(); i++) {
-    count[s[i] - 'a']++;
+  for (auto temp : s) {
+    count[temp - 'a']++;
   }
 
-  for (int i = 0; i < 26; i++) {
-    cout << count[i] << ' ';
+  for (auto cnt : count) {
+    cout << cnt << ' ';
   }
 
   return 0;
